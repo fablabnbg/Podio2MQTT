@@ -35,13 +35,13 @@ class PodioPruefungApp:
     def create_pruefung_items(self):
         self.all_pruefungen = {}
         fitems = self.c.Item.filter_by_view(cfg['APP_ID'], cfg['VIEW_ID'])
-        count = 0
         for pruef in fitems['items']:  # iterate over items
             nextp = None
             desc = None
             obj = None   
             preWarning = None
             result = None
+            app_item_id = pruef['app_item_id']
             for pruef_field in pruef['fields']:
                 flabel = pruef_field['label']
                 if (flabel == 'Beschreibung'):
@@ -63,7 +63,7 @@ class PodioPruefungApp:
                 else:
                     print('Unused flabel' + flabel)
                     
-            node_id = "pruefung" + str(count)
+            node_id = f"pruefung{app_item_id:02d}"
             newp = Pruefung(node_id, nextp, obj, preWarning, result, desc)
             print(preWarning)            
             self.all_pruefungen[node_id] = newp
@@ -78,20 +78,33 @@ if __name__ == '__main__':
     app.create_pruefung_items()
     print(app.all_pruefungen)
         
-    for pruef_id in app.all_pruefungen:
-        pnode = NodeCheckInterval(pdevice, pruef_id, pruef_id)
-        pdevice.add_node(pnode)
+    for pruef_id in app.all_pruefungen:        
+        pdevice.add_node(NodeCheckInterval(pdevice, pruef_id, pruef_id))
         
     pdevice.start()
     
     while True:
+        remove_nodes = []
         for node_id in pdevice.nodes:
             print(node_id)            
-            pdevice.nodes[node_id].updatePreWarning(app.all_pruefungen[node_id].prew)
+            try:
+                pdevice.nodes[node_id].updatePreWarning(app.all_pruefungen[node_id].prew)
+            except KeyError:
+                print(f"Prüfung {node_id} deleted.")
+                remove_nodes.append(node_id)
+                continue
             pdevice.nodes[node_id].updateNextCheck(app.all_pruefungen[node_id].next_date)
             pdevice.nodes[node_id].updateDescription(app.all_pruefungen[node_id].desc)
             pdevice.nodes[node_id].updateInstruction(app.all_pruefungen[node_id].inst)
             pdevice.nodes[node_id].updatePassed(app.all_pruefungen[node_id].res)
-        time.sleep(600)
+        
+        for node_id in remove_nodes: pdevice.remove_node(node_id)
+        time.sleep(60)
         app.create_pruefung_items()
+        for pruef_id in app.all_pruefungen:
+            if not pruef_id in pdevice.nodes:
+                print(f"Prüfung {pruef_id} added")
+                pdevice.add_node(NodeCheckInterval(pdevice, pruef_id, pruef_id)
+)
+                
         
