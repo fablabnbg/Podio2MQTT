@@ -65,10 +65,7 @@ class PodioPruefungApp:
                     
             node_id = f"pruefung{app_item_id:02d}"
             newp = Pruefung(node_id, nextp, obj, preWarning, result, desc)
-            print(preWarning)            
             self.all_pruefungen[node_id] = newp
-            count += 1  
-
 
 if __name__ == '__main__':
     

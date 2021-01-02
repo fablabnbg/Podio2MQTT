@@ -22,12 +22,12 @@ class NodeCheckInterval(Node_Base):
         Constructor
         '''
         super().__init__(device, node_id, name, type_, retain, qos)
-        self.add_property(Property_String(self, "checkobject", "Zu prüfendes Objekt"))
-        self.add_property(Property_DateTime(self, "nextcheck", "Nächste Prüfung")) ## TODO: make settable
-        self.add_property(Property_String(self, "instruction", "Wartungsanleitung"))
-        self.add_property(Property_Integer(self, 'prewarntime', 'Vorwarnzeit', unit='hours', settable= False))
-        self.add_property(Property_Enum(self, "expiration", "Fälligkeit", settable=False, data_format="Valid,Expired,Due_Soon"))  # TODO: Clarify, if a state for failed check shall be added here
-        self.add_property(Property_Boolean(self, "passed", "Prüfung Bestanden", settable=False))
+        self.add_property(Property_String(self, "checkobject", f"Zu prüfendes Objekt {node_id}"))
+        self.add_property(Property_DateTime(self, "nextcheck", f"Nächste Prüfung ({node_id})")) ## TODO: make settable
+        self.add_property(Property_String(self, "instruction", f"Wartungsanleitung {node_id}"))
+        self.add_property(Property_Integer(self, 'prewarntime', f'Vorwarnzeit {node_id}', unit='hours', settable= False))
+        self.add_property(Property_Enum(self, "expiration", f"Fälligkeit ({node_id})", settable=False, data_format="Valid,Expired,Due_Soon"))  # TODO: Clarify, if a state for failed check shall be added here
+        self.add_property(Property_Boolean(self, "passed", f"Prüfung Bestanden ({node_id})", settable=False))
         #self.add_property(Property_Base(self, "nextcheck", "Nächste Prüfung", false, True, 1, unit, data_type, data_format, value, set_value, tags, meta))
 
     def updateNextCheck(self, nextcheck):        
