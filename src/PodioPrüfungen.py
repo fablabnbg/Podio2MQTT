@@ -8,21 +8,6 @@ from PodioDevice import Device_Podio
 from NodeCheckInterval import NodeCheckInterval
 import time
 
-CLIENT_ID = 'openhab-integration'
-CLIENT_KEY = 'HI0yfWHlhUB2wENHvNlg4O3tFsPcOBtM1LzIrm3pgIzwveC6PURDfi75gVEWH40Z'
-
-# # Test (Beta-Workspace)
-APP_ID = 25603856
-APP_KEY = '1734fc9680f24e664f5f58f4b1e80b8f' 
-
-# VIEW_ID = 48228122 # alle Items
-VIEW_ID = 48229153  # nur "akltive" (nicht archivierte) Items 
-
-# # Prod (Base-Workspace)
-# APP_ID =  7394305
-# APP_KEY = '805b82c497684cff9b5eb9de0950c2d5'
-# VIEW_ID = 22148662
-
 from pypodio2 import api
 
 from podioconfig import PODIO_CONFIG as cfg
@@ -45,12 +30,11 @@ class PodioPruefungApp:
 
     def __init__(self): 
         print(cfg)
-        #self.c = api.OAuthAppClient(CLIENT_ID, CLIENT_KEY, APP_ID, APP_KEY)
         self.c = api.OAuthAppClient(cfg['CLIENT_ID'], cfg['CLIENT_KEY'], cfg['APP_ID'], cfg['APP_KEY'])        
         
     def create_pruefung_items(self):
         self.all_pruefungen = {}
-        fitems = self.c.Item.filter_by_view(APP_ID, VIEW_ID)
+        fitems = self.c.Item.filter_by_view(cfg['APP_ID'], cfg['VIEW_ID'])
         count = 0
         for pruef in fitems['items']:  # iterate over items
             nextp = None

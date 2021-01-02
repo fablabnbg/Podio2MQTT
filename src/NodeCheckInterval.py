@@ -12,8 +12,6 @@ from datetime import datetime, timedelta
 from homie.node.property.property_integer import Property_Integer
 from homie.node.property.property_enum import Property_Enum
 from homie.node.property.property_boolean import Property_Boolean
-from time import gmtime
-
 
 class NodeCheckInterval(Node_Base):    
     '''

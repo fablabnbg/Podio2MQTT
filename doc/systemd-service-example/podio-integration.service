@@ -1,0 +1,13 @@
+[Unit]
+Description=Podio to MQTT
+After=network.target
+StartLimitIntervalSec=0
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=mosquitto
+ExecStart=/usr/bin/env python3 /opt/podio-integration/PodioPrüfungen.py
+
+[Install]
+WantedBy=multi-user.target
