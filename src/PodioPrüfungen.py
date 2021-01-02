@@ -10,7 +10,7 @@ import time
 
 from pypodio2 import api
 
-from podioconfig import PODIO_CONFIG as cfg
+from podioconfig import PODIO_CONFIG as cfg, MQTT_CONFIG as mqtt_cfg
 
 class Pruefung:
 
@@ -72,7 +72,7 @@ class PodioPruefungApp:
 
 if __name__ == '__main__':
     
-    pdevice = Device_Podio()
+    pdevice = Device_Podio(mqtt_settings=mqtt_cfg)
     
     app = PodioPruefungApp()
     app.create_pruefung_items()
