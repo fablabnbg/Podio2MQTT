@@ -96,7 +96,7 @@ if __name__ == '__main__':
             pdevice.nodes[node_id].updatePassed(app.all_pruefungen[node_id].res)
         
         for node_id in remove_nodes: pdevice.remove_node(node_id)
-        time.sleep(60)
+        time.sleep(600)
         app.create_pruefung_items()
         for pruef_id in app.all_pruefungen:
             if not pruef_id in pdevice.nodes:
